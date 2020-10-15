@@ -9,6 +9,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui = Ui_mainWindow()
 		self.ui.setupUi(self)
 		self.ui.BTN_CORNER.clicked.connect(self.corner_clicked)
+		self.ui.CLOSE_ALL_WINDOW.clicked.connect(self.close_win)
 
 	def corner_clicked(self):
 		# set window name
@@ -33,6 +34,9 @@ class MainWindow(QtWidgets.QMainWindow):
 			cv.imshow(windowName, img)
 		# set window name
 		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
+
+	def close_win(self):
+		cv.destroyAllWindows()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication([])

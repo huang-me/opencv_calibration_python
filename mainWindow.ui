@@ -110,17 +110,17 @@
     <string>Close All Windows</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="BTN_FILE">
+  <widget class="QComboBox" name="ID_IMAGE">
    <property name="geometry">
     <rect>
      <x>310</x>
      <y>150</y>
-     <width>111</width>
+     <width>121</width>
      <height>25</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Select Image</string>
+   <property name="currentText">
+    <string/>
    </property>
   </widget>
  </widget>

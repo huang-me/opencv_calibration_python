@@ -38,9 +38,10 @@ class Ui_mainWindow(object):
         self.CLOSE_ALL_WINDOW = QtWidgets.QPushButton(mainWindow)
         self.CLOSE_ALL_WINDOW.setGeometry(QtCore.QRect(350, 420, 131, 31))
         self.CLOSE_ALL_WINDOW.setObjectName("CLOSE_ALL_WINDOW")
-        self.BTN_FILE = QtWidgets.QPushButton(mainWindow)
-        self.BTN_FILE.setGeometry(QtCore.QRect(310, 150, 111, 25))
-        self.BTN_FILE.setObjectName("BTN_FILE")
+        self.ID_IMAGE = QtWidgets.QComboBox(mainWindow)
+        self.ID_IMAGE.setGeometry(QtCore.QRect(310, 150, 121, 25))
+        self.ID_IMAGE.setCurrentText("")
+        self.ID_IMAGE.setObjectName("ID_IMAGE")
 
         self.retranslateUi(mainWindow)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
@@ -55,4 +56,3 @@ class Ui_mainWindow(object):
         self.TEXT_EXTRINSIC.setText(_translate("mainWindow", "1.3 Find Extrinsic"))
         self.BTN_EXTRINSIC.setText(_translate("mainWindow", "1.3 Find Extrinsic"))
         self.CLOSE_ALL_WINDOW.setText(_translate("mainWindow", "Close All Windows"))
-        self.BTN_FILE.setText(_translate("mainWindow", "Select Image"))

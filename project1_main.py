@@ -14,15 +14,16 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.CLOSE_ALL_WINDOW.clicked.connect(self.close_win)
 		self.ui.BTN_INTRINSIC.clicked.connect(self.intrinsic)
 		self.ui.BTN_DISTORTION.clicked.connect(self.distort)
-		self.ui.BTN_FILE.clicked.connect(self.choosefile)
+		self.ui.ID_IMAGE.currentIndexChanged.connect(self.choosefile)
+		# initialize the combo box
+		self.ui.ID_IMAGE.addItems(['1', '2', '3', '4', '5', '6', \
+									'7', '8', '9', '10', '11', '12', \
+									'13', '14', '15'])
 		self.extrinsic_file = ""
 	
 	def choosefile(self):
-		fileDir = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Image", "./Q1_Image/")
-		if fileDir == "":
-			print("Didn't choose any image file.")
-		else:
-			self.extrinsic_file = fileDir[0]
+		file_id = self.ui.ID_IMAGE.currentIndex() + 1
+		self.extrinsic_file = ("Q1_Image/{}.bmp".format(file_id))
 
 	def distort(self):
 		# set window name

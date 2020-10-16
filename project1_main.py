@@ -1,4 +1,5 @@
 import sys
+import glob
 import cv2 as cv
 import numpy as np
 from mainWindow import Ui_mainWindow
@@ -11,6 +12,70 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 		self.ui.BTN_CORNER.clicked.connect(self.corner_clicked)
 		self.ui.CLOSE_ALL_WINDOW.clicked.connect(self.close_win)
+		self.ui.BTN_INTRINSIC.clicked.connect(self.intrinsic)
+		self.ui.BTN_DISTORTION.clicked.connect(self.distort)
+
+	def distort(self):
+		# set window name
+		QtWidgets.QMainWindow.setWindowTitle(self, "1.1 Find Distortion")
+		# camera calibration to compute K
+		criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+		w = 8
+		h = 11
+		objp=np.zeros((w*h, 3), np.float32)
+		objp[:, :2]=np.mgrid[0:w, 0:h].T.reshape(-1, 2)
+		#store the world coord. and image coord. points
+		objpoints=[]
+		imgpoints=[]
+		images=glob.glob('Q1_Image/*.bmp')
+
+		for fname in images:
+			img=cv.imread(fname)
+			gray=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+			#find the corner of checkboard
+			ret, corners=cv.findChessboardCorners(gray, (w,h), None)
+			#save the points as long as find enough pair points
+			if ret == True:
+				cv.cornerSubPix(gray,corners,(8,11),(-1,-1),criteria)
+				objpoints.append(objp)
+				imgpoints.append(corners)
+
+		#calibration
+		ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+		print(dist)
+		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
+
+
+	def intrinsic(self):
+		# set window name
+		QtWidgets.QMainWindow.setWindowTitle(self, "1.1 Find Intrinsic")
+		# camera calibration to compute K
+		criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+		w = 8
+		h = 11
+		objp=np.zeros((w*h, 3), np.float32)
+		objp[:, :2]=np.mgrid[0:w, 0:h].T.reshape(-1, 2)
+		#store the world coord. and image coord. points
+		objpoints=[]
+		imgpoints=[]
+		images=glob.glob('Q1_Image/*.bmp')
+
+		for fname in images:
+			img=cv.imread(fname)
+			gray=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+			#find the corner of checkboard
+			ret, corners=cv.findChessboardCorners(gray, (w,h), None)
+			#save the points as long as find enough pair points
+			if ret == True:
+				cv.cornerSubPix(gray,corners,(8,11),(-1,-1),criteria)
+				objpoints.append(objp)
+				imgpoints.append(corners)
+
+		#calibration
+		ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+		print(mtx)
+		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
+
 
 	def corner_clicked(self):
 		# set window name

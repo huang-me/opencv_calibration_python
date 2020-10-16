@@ -1,5 +1,6 @@
 import sys
 import cv2 as cv
+import numpy as np
 from mainWindow import Ui_mainWindow
 from PyQt5 import QtWidgets
 

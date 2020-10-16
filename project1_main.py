@@ -14,6 +14,16 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.CLOSE_ALL_WINDOW.clicked.connect(self.close_win)
 		self.ui.BTN_INTRINSIC.clicked.connect(self.intrinsic)
 		self.ui.BTN_DISTORTION.clicked.connect(self.distort)
+		self.ui.BTN_FILE.clicked.connect(self.choosefile)
+		self.extrinsic_file = ""
+	
+	def choosefile(self):
+		fileDir = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Image")
+		if fileDir == "":
+			print("Didn't choose any image file.")
+		else:
+			self.extrinsic_file = fileDir[0]
+			print(fileDir[0])
 
 	def distort(self):
 		# set window name

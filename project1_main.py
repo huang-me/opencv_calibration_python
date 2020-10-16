@@ -18,12 +18,11 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.extrinsic_file = ""
 	
 	def choosefile(self):
-		fileDir = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Image")
+		fileDir = QtWidgets.QFileDialog.getOpenFileName(self, "Choose Image", "./Q1_Image/")
 		if fileDir == "":
 			print("Didn't choose any image file.")
 		else:
 			self.extrinsic_file = fileDir[0]
-			print(fileDir[0])
 
 	def distort(self):
 		# set window name

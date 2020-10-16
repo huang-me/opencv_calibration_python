@@ -97,19 +97,6 @@
     <string>1.3 Find Extrinsic</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="BOX_FILE">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>140</y>
-     <width>151</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="currentText">
-    <string/>
-   </property>
-  </widget>
   <widget class="QPushButton" name="CLOSE_ALL_WINDOW">
    <property name="geometry">
     <rect>
@@ -121,6 +108,19 @@
    </property>
    <property name="text">
     <string>Close All Windows</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="BTN_FILE">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>150</y>
+     <width>111</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Image</string>
    </property>
   </widget>
  </widget>

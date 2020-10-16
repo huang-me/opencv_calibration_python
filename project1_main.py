@@ -17,7 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def distort(self):
 		# set window name
-		QtWidgets.QMainWindow.setWindowTitle(self, "1.1 Find Distortion")
+		QtWidgets.QMainWindow.setWindowTitle(self, "1.4 Find Distortion")
 		# camera calibration to compute K
 		criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 		w = 8
@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def intrinsic(self):
 		# set window name
-		QtWidgets.QMainWindow.setWindowTitle(self, "1.1 Find Intrinsic")
+		QtWidgets.QMainWindow.setWindowTitle(self, "1.2 Find Intrinsic")
 		# camera calibration to compute K
 		criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 		w = 8

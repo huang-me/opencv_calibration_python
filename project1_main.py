@@ -12,7 +12,6 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 		# connect buttons to functions
 		self.ui.BTN_CORNER.clicked.connect(self.corner_clicked)
-		self.ui.CLOSE_ALL_WINDOW.clicked.connect(self.close_win)
 		self.ui.BTN_INTRINSIC.clicked.connect(self.intrinsic)
 		self.ui.BTN_DISTORTION.clicked.connect(self.distort)
 		self.ui.ID_IMAGE.currentIndexChanged.connect(self.choosefile)
@@ -68,7 +67,6 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.rvecs = rvecs
 
 	def extrinsic(self):
-		
 		R, _ = cv.Rodrigues(np.float32(self.rvecs[self.extrinsic_num - 1]))
 		tvec = np.float32(self.tvecs[self.extrinsic_num - 1])
 		# append R and T -> extrinsic matrix
@@ -101,16 +99,18 @@ class MainWindow(QtWidgets.QMainWindow):
 			if ret == True:
 				corners2 = cv.cornerSubPix(gray, corners, (8, 11), (-1, -1), criteria)
 				cv.drawChessboardCorners(img, (8, 11), corners2, ret)
-			# window of images
-			windowName = ("Display Window {}".format(i))
-			cv.namedWindow(windowName, 0);
-			cv.resizeWindow(windowName, 500, 500);
+			## window of images
+			#windowName = ("Display Window {}".format(i))
+			windowName = "Display Window"
+			cv.namedWindow(windowName, 0)
+			cv.resizeWindow(windowName, 500, 500)
 			cv.imshow(windowName, img)
+			cv.waitKey(500)
+
+		cv.destroyAllWindows()
+			
 		# set window name
 		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
-
-	def close_win(self):
-		cv.destroyAllWindows()
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication([])

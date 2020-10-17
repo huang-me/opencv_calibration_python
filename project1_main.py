@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.extrinsic_num = 0
 		self.mtx = []
 		self.dist = []
-		self.tvec = []
+		self.tvecs = []
 		self.rvecs = []
 		# initial calculate
 		self.calibrate()
@@ -64,14 +64,15 @@ class MainWindow(QtWidgets.QMainWindow):
 		# set the variable of the class
 		self.mtx = mtx
 		self.dist = dist
-		self.tvec = tvec
+		self.tvecs = tvecs
 		self.rvecs = rvecs
 
 	def extrinsic(self):
 		
 		R, _ = cv.Rodrigues(np.float32(self.rvecs[self.extrinsic_num - 1]))
+		tvec = np.float32(self.tvecs[self.extrinsic_num - 1])
 		# append R and T -> extrinsic matrix
-		ext = np.append(R, self.tvec, axis=1)
+		ext = np.append(R, tvec, axis=1)
 		print(ext)
 	
 	def choosefile(self):

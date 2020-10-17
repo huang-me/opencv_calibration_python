@@ -19,11 +19,53 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.ID_IMAGE.addItems(['1', '2', '3', '4', '5', '6', \
 									'7', '8', '9', '10', '11', '12', \
 									'13', '14', '15'])
-		self.extrinsic_file = ""
+		self.extrinsic_num = 0
+		self.ui.BTN_EXTRINSIC.clicked.connect(self.extrinsic)
+
+	def extrinsic(self):
+		# set window name
+		QtWidgets.QMainWindow.setWindowTitle(self, "1.3 Find Extrinsic")
+		# camera calibration to compute K
+		criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+		w = 8
+		h = 11
+		objp=np.zeros((w*h, 3), np.float32)
+		objp[:, :2]=np.mgrid[0:w, 0:h].T.reshape(-1, 2)
+		#store the world coord. and image coord. points
+		objpoints=[]
+		imgpoints=[]
+		images=glob.glob('Q1_Image/*.bmp')
+
+		for fname in images:
+			img=cv.imread(fname)
+			gray=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+			#find the corner of checkboard
+			ret, corners=cv.findChessboardCorners(gray, (w,h), None)
+			#save the points as long as find enough pair points
+			if ret == True:
+				cv.cornerSubPix(gray,corners,(8,11),(-1,-1),criteria)
+				objpoints.append(objp)
+				imgpoints.append(corners)
+
+		#calibration
+		ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+	
+		objp = np.float32(objpoints).reshape(-1,3)
+		imgp = np.float32(imgpoints).reshape(-1,2)
+	
+		ret, rvec, tvec = cv.solvePnP(objp, imgp, mtx, dist)
+
+		R, _ = cv.Rodrigues(np.float32(rvecs[self.extrinsic_num - 1]))
+		# append R and T -> extrinsic matrix
+		ext = np.append(R, tvec, axis=1)
+		print(ext)
+
+		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
+
 	
 	def choosefile(self):
 		file_id = self.ui.ID_IMAGE.currentIndex() + 1
-		self.extrinsic_file = ("Q1_Image/{}.bmp".format(file_id))
+		self.extrinsic_num = file_id
 
 	def distort(self):
 		# set window name
@@ -53,6 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		#calibration
 		ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 		print(dist)
+
 		QtWidgets.QMainWindow.setWindowTitle(self, "Main Window")
 
 

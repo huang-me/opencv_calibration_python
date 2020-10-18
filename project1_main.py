@@ -2,6 +2,7 @@ import sys
 import glob
 import cv2 as cv
 import numpy as np
+import matplotlib.pyplot as plt
 from mainWindow import Ui_mainWindow
 from PyQt5 import QtWidgets
 
@@ -17,6 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.ID_IMAGE.currentIndexChanged.connect(self.choosefile)
 		self.ui.BTN_EXTRINSIC.clicked.connect(self.extrinsic)
 		self.ui.BTN_AUGMENTED.clicked.connect(self.augmented)
+		self.ui.BTN_DISPARITY.clicked.connect(self.disparity)
 		# initialize the combo box
 		self.ui.ID_IMAGE.addItems(['1', '2', '3', '4', '5', '6', \
 									'7', '8', '9', '10', '11', '12', \
@@ -29,6 +31,17 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.rvecs = []
 		# initial calculate
 		self.calibrate()
+
+	def disparity(self):
+		imgL = cv.imread('Q3_Image/imL.png', 0)
+		imgR = cv.imread('Q3_Image/imR.png', 0)
+
+		stereo = cv.StereoBM_create(numDisparities=16, blockSize=15)
+		disparity = stereo.compute(imgL, imgR)
+		# make plt use one thread to prevent conflict with main loop
+		plt.ion()
+		plt.imshow(disparity, 'gray')
+		plt.show()
 
 	def augmented(self):
 		# camera calibration to compute K
@@ -85,7 +98,6 @@ class MainWindow(QtWidgets.QMainWindow):
 			i += 1
 		# destroy all windows after showing images
 		cv.destroyAllWindows()
-
 
 	def calibrate(self):
 		# camera calibration to compute K

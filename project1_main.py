@@ -19,6 +19,8 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.ui.BTN_EXTRINSIC.clicked.connect(self.extrinsic)
 		self.ui.BTN_AUGMENTED.clicked.connect(self.augmented)
 		self.ui.BTN_DISPARITY.clicked.connect(self.disparity)
+		self.ui.BTN_KEYPOINT.clicked.connect(self.find_keypoint)
+		self.ui.BTN_MATCHKEY.clicked.connect(self.draw_matchkey)
 		# initialize the combo box
 		self.ui.ID_IMAGE.addItems(['1', '2', '3', '4', '5', '6', \
 									'7', '8', '9', '10', '11', '12', \
@@ -31,6 +33,65 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.rvecs = []
 		# initial calculate
 		self.calibrate()
+
+	def draw_matchkey(self):
+		# load images
+		img = cv.imread('Q4_Image/Aerial1.jpg', 0)
+		img2 = cv.imread('Q4_Image/Aerial2.jpg', 0)
+
+		sift = cv.SIFT_create(6, sigma=1.14)
+		kp, des = sift.detectAndCompute(img, None)
+
+		sift2 = cv.SIFT_create(6, sigma=1.14)
+		kp2, des2 = sift.detectAndCompute(img2, None)
+
+		img = cv.drawKeypoints(img, kp, img)
+		img2 = cv.drawKeypoints(img2, kp2, img2)
+
+		# create BFMatcher object
+		bf = cv.BFMatcher()
+		matches = bf.knnMatch(des, des2, k=2)
+
+		# Apply ratio test
+		good = []
+		for m,n in matches:
+			if m.distance < 0.75*n.distance:
+				good.append([m])
+
+		# Draw first 10 matches.
+		img3 = img
+		img3 = cv.drawMatchesKnn(img, kp, img2, kp2, good[:10], None, flags=2)
+
+		plt.ion()
+		plt.figure(2)
+		plt.imshow(img3)
+		plt.show()
+		plt.savefig('figure2.jpg')
+
+	def find_keypoint(self):
+		# load images
+		img = cv.imread('Q4_Image/Aerial1.jpg')
+		img2 = cv.imread('Q4_Image/Aerial2.jpg')
+		# convert images into gray
+		gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+		gray2 = cv.cvtColor(img2, cv.COLOR_BGR2GRAY)
+
+		sift = cv.SIFT_create(6, sigma=1.14)
+		kp, des = sift.detectAndCompute(gray, None)
+
+		sift2 = cv.SIFT_create(6, sigma=1.14)
+		kp2, des2 = sift.detectAndCompute(gray2, None)
+
+		cv.drawKeypoints(gray, kp, img, (255,255,0))
+		cv.drawKeypoints(gray2, kp2, img2, (255,255,0))
+
+		plt.ion()
+		plt.subplot(1, 2, 1)
+		plt.imshow(img)
+		plt.subplot(1, 2, 2)
+		plt.imshow(img2)
+		plt.show()
+		plt.savefig('figure1.jpg')
 
 	def disparity(self):
 		imgL = cv.imread('Q3_Image/imL.png', 0)
